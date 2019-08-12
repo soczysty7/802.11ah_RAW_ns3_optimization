@@ -21,9 +21,7 @@ if ( text ) :
         for line in oldfile:
             if any(good_word in line for good_word in good_words):
                 if  '0;nodestatsheader;' in line :
-                    print(line)
-                    line.replace('0;nodestatsheader;', 'TIMESTAMP;nodestatsheader;',1)
-                    print(line)
+                    line = line.replace('0;nodestatsheader;', 'TIMESTAMP;nodestatsheader;')
                 newfile.write(line)
 
 

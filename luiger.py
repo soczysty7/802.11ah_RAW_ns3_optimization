@@ -8,13 +8,13 @@ from prePlot import PreparePlot as pp
 from chartistLINEstack import LineChartist as ch
 import grouper as gr
 
-rawObj = gr.rawDictGen(10, 100, 3)
-plot_xAxis = [0, 110]
+rawObj = gr.rawDictGen(500, 500, 4)
+plot_xAxis = [490, 510]
 directoryPath = "/home/soczysty7/Mgr_2019/8LipcaClone/IEEE-802.11ah-ns-3/"
-resultsOfSim = '/home/soczysty7/Mgr_2019/8LipcaClone/pipelineCampaign2/'
-plotDir = '/home/soczysty7/Mgr_2019/8LipcaClone/pipelineCampaign2_plots/'
-logPath = '/home/soczysty7/Mgr_2019/pipeline/StaticRawCampaign/logs/'
-subPaths = ['1c', '2c', '3c']
+resultsOfSim = '/home/soczysty7/Mgr_2019/8LipcaClone/try500/'
+plotDir = '/home/soczysty7/Mgr_2019/8LipcaClone/try500_plots/'
+logPath = '/home/soczysty7/Mgr_2019/magister_ludi/logs/'
+subPaths = ['4c']
 #res= '/home/soczysty7/Mgr_2019/Results/testCampaign1toPLOT/'
 
 class GenTraffic(luigi.Task):
@@ -28,8 +28,8 @@ class GenTraffic(luigi.Task):
         print(rawObj)
         t = 3.0
         o = 0.3
-        n = 10
-        m = 100
+        n = 500
+        m = 500
         genTr=tm(directoryPath, self.TrafficPath)
         genTr.genTraffic(n,m,o,t)
         now = datetime.now()
@@ -64,7 +64,7 @@ class RunSimulations(luigi.Task):
         return luigi.LocalTarget(logPath + '3_run-sim.txt')
 
     def run(self):
-        simLchrr = sm(directoryPath, resultsOfSim, rawObj, 3)
+        simLchrr = sm(directoryPath, resultsOfSim, rawObj, 1)
         simLchrr.writeCmdsToFile()
         simLchrr.RunSimulations()
 
@@ -93,8 +93,8 @@ class MakeCsv(luigi.Task):
 
 class PrepareToPlot(luigi.Task):
 
-    def requires(self):
-        return MakeCsv()
+    # def requires(self):
+    #     return MakeCsv()
 
     def output(self):
         return luigi.LocalTarget(logPath + '5_prepare_bf_plot.txt')
@@ -110,8 +110,8 @@ class PrepareToPlot(luigi.Task):
 
 class GenerateCharts(luigi.Task):
 
-    # def requires(self):
-    #     return PrepareToPlot()
+    def requires(self):
+        return PrepareToPlot()
 
     def output(self):
         return luigi.LocalTarget('./logs/6_make_plots.txt')
@@ -132,7 +132,7 @@ class Final(luigi.Task):
         return GenerateCharts()
 
     def output(self):
-        return luigi.LocalTarget(logPath + '6final.txt')
+        return luigi.LocalTarget(logPath + '7final.txt')
 
     def run(self):
         print(rawObj)
