@@ -1,0 +1,18 @@
+od 1175 :
+
+w s1g-test-tim-raw.cc
+
+	/*config.NSSFile = config.trafficType + "_" + std::to_string(config.Nsta)
+			+ "sta_" + std::to_string(config.NGroup) + "Group_"
+			+ std::to_string(config.NRawSlotNum) + "slots_"
+			+ std::to_string(config.payloadSize) + "payload_"
+			+ std::to_string(config.totaltraffic) + "Mbps_"
+			+ std::to_string(config.BeaconInterval) + "BI" + ".nss";*/
+
+	config.NSSFile += + ".nss";
+
+    configuration.cc od 23 :
+
+    //cmd.AddValue ("folder", "folder where result files are placed", folder);
+    //cmd.AddValue ("file", "files containing reslut information", file);
+    cmd.AddValue("NSSFile", "Path of the nss file to write. Note: if a visualizer is active it will also save the nss file", NSSFile);
