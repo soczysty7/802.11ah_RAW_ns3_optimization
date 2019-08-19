@@ -58,7 +58,7 @@ class CsvMaker:
     def analyzeToCsv(self):
     # 2 Skopiuj analyzebatch.pl do wyniczkiDir, skopiuj analyzedata.sh do kazdego folderu np do 32/32  
  
-        scriptsDir = '/home/soczysty7/Mgr_2019/8LipcaClone/ahVisualizer/simulations'
+        scriptsDir = '/home/soczysty7/Mgr_19/magister_ludi'
 
         for dirs in os.listdir(self.wyniczkiDir):
         

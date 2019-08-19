@@ -8,13 +8,13 @@ from prePlot import PreparePlot as pp
 from chartistLINEstack import LineChartist as ch
 import grouper as gr
 
-rawObj = gr.rawDictGen(500, 500, 4)
-plot_xAxis = [490, 510]
-directoryPath = "/home/soczysty7/Mgr_2019/8LipcaClone/IEEE-802.11ah-ns-3/"
-resultsOfSim = '/home/soczysty7/Mgr_2019/8LipcaClone/try500/'
-plotDir = '/home/soczysty7/Mgr_2019/8LipcaClone/try500_plots/'
-logPath = '/home/soczysty7/Mgr_2019/magister_ludi/logs/'
-subPaths = ['4c']
+rawObj = gr.rawDictGen(1200, 3600, 6)
+plot_xAxis = [1100, 3700]
+directoryPath = "/home/soczysty7/Mgr_19/IEEE-802.11ah-ns-3/"
+resultsOfSim = '/home/soczysty7/Mgr_19/ponad_tysiac/'
+plotDir = '/home/soczysty7/Mgr_19/ponad_tysiac_plots/'
+logPath = '/home/soczysty7/Mgr_19/magister_ludi/logs/'
+subPaths = ['4c', '5c', '6c' ]
 #res= '/home/soczysty7/Mgr_2019/Results/testCampaign1toPLOT/'
 
 class GenTraffic(luigi.Task):
@@ -28,8 +28,8 @@ class GenTraffic(luigi.Task):
         print(rawObj)
         t = 3.0
         o = 0.3
-        n = 500
-        m = 500
+        n = 1200
+        m = 3600
         genTr=tm(directoryPath, self.TrafficPath)
         genTr.genTraffic(n,m,o,t)
         now = datetime.now()
@@ -64,7 +64,7 @@ class RunSimulations(luigi.Task):
         return luigi.LocalTarget(logPath + '3_run-sim.txt')
 
     def run(self):
-        simLchrr = sm(directoryPath, resultsOfSim, rawObj, 1)
+        simLchrr = sm(directoryPath, resultsOfSim, rawObj, 3)
         simLchrr.writeCmdsToFile()
         simLchrr.RunSimulations()
 
@@ -93,8 +93,8 @@ class MakeCsv(luigi.Task):
 
 class PrepareToPlot(luigi.Task):
 
-    # def requires(self):
-    #     return MakeCsv()
+    def requires(self):
+        return MakeCsv()
 
     def output(self):
         return luigi.LocalTarget(logPath + '5_prepare_bf_plot.txt')

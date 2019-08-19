@@ -39,12 +39,14 @@ class LineChartist:
 
             fr={} # Slownik zaczytanych dataframow - bedzie potrzebny zeby nie miec miliona zmiennych
             for j in range(0, len(frames)):
-                if (len(frames[j]['TrafficString'][0]) == 92): # 2 cyfrowa liczba stacji
+                if (len(frames[j]['TrafficString'][0]) == 78): # 1 cyfrowa liczba stacji
                     i=frames[j]['TrafficString'][0][-12:-11]
-                if (len(frames[j]['TrafficString'][0]) == 93): # 2 cyfrowa liczba stacji
+                if (len(frames[j]['TrafficString'][0]) == 79): # 2 cyfrowa liczba stacji
                     i=frames[j]['TrafficString'][0][-13:-11]
-                elif (len(frames[j]['TrafficString'][0]) == 94): # 3 cyfrowa liczba stacji
+                if (len(frames[j]['TrafficString'][0]) == 80): # 3 cyfrowa liczba stacji
                     i=frames[j]['TrafficString'][0][-14:-11]
+                elif (len(frames[j]['TrafficString'][0]) == 81): # 3 cyfrowa liczba stacji
+                    i=frames[j]['TrafficString'][0][-15:-11]
                 fr[i]=frames[j] # w slowniku do klucza 'nsta' wczytuje dany dataframe
 
             meanArr = [] #lista srednich
@@ -60,14 +62,16 @@ class LineChartist:
                     for j in range(0, len(fr[n][metric][i])):
                         fr[n][metric][i][j]=float(fr[n][metric][i][j])
                     fr[n][metric][i]=np.mean(fr[n][metric][i])
-
+                                                                # prosze zrob cos z tymi sciezkami
                 for i in range(0, len(fr[n]['TrafficString'])):
-                    if (len(fr[n]['TrafficString'][i]) == 92):
-                        a = fr[n]['TrafficString'][i][-12:-11]   #nie kombinowac z tym trafficstringiem wystarczy Nsta +1
-                    if (len(fr[n]['TrafficString'][i]) == 93):
-                        a = fr[n]['TrafficString'][i][-13:-11]
-                    elif (len(fr[n]['TrafficString'][i]) == 94):
+                    if (len(fr[n]['TrafficString'][i]) == 78): # 92
+                        a = fr[n]['TrafficString'][i][-12:-11]       #nie kombinowac z tym trafficstringiem wystarczy Nsta +1
+                    if (len(fr[n]['TrafficString'][i]) == 79): # 93
+                        a = fr[n]['TrafficString'][i][-13:-11] 
+                    if (len(fr[n]['TrafficString'][i]) == 80): # 94
                         a = fr[n]['TrafficString'][i][-14:-11]
+                    elif (len(fr[n]['TrafficString'][i]) == 81): #95
+                        a = fr[n]['TrafficString'][i][-15:-11]
                     fr[n]['TrafficString'][i]=float(a)
 
                 fr[n]=fr[n].rename(columns={'TrafficString':'NSta'})
