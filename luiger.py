@@ -8,13 +8,13 @@ from prePlot import PreparePlot as pp
 from chartistLINEstack import LineChartist as ch
 import grouper as gr
 
-rawObj = gr.rawDictGen(500, 500, 4)
-plot_xAxis = [490, 510]
+rawObj = gr.rawDictGen(1200, 3600, 6)
+plot_xAxis = [1100, 3700]
 directoryPath = "/home/soczysty7/Mgr_2019/8LipcaClone/IEEE-802.11ah-ns-3/"
-resultsOfSim = '/home/soczysty7/Mgr_2019/8LipcaClone/try500/'
-plotDir = '/home/soczysty7/Mgr_2019/8LipcaClone/try500_plots/'
+resultsOfSim = '/home/soczysty7/Mgr_2019/8LipcaClone/ponad_tysiac/'
+plotDir = '/home/soczysty7/Mgr_2019/8LipcaClone/ponad_tysiac_plots/'
 logPath = '/home/soczysty7/Mgr_2019/magister_ludi/logs/'
-subPaths = ['4c']
+subPaths = ['4c', '5c', '6c']
 #res= '/home/soczysty7/Mgr_2019/Results/testCampaign1toPLOT/'
 
 class GenTraffic(luigi.Task):
@@ -28,8 +28,8 @@ class GenTraffic(luigi.Task):
         print(rawObj)
         t = 3.0
         o = 0.3
-        n = 500
-        m = 500
+        n = 20
+        m = 40
         genTr=tm(directoryPath, self.TrafficPath)
         genTr.genTraffic(n,m,o,t)
         now = datetime.now()
@@ -57,8 +57,8 @@ class GenRawConfigs(luigi.Task):
 
 class RunSimulations(luigi.Task):
 
-    def requires(self):
-        return GenRawConfigs()
+    # def requires(self):
+    #     return GenRawConfigs()
 
     def output(self):
         return luigi.LocalTarget(logPath + '3_run-sim.txt')
@@ -110,8 +110,8 @@ class PrepareToPlot(luigi.Task):
 
 class GenerateCharts(luigi.Task):
 
-    def requires(self):
-        return PrepareToPlot()
+    # def requires(self):
+    #     return PrepareToPlot()
 
     def output(self):
         return luigi.LocalTarget('./logs/6_make_plots.txt')
