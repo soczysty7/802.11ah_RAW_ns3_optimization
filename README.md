@@ -10,6 +10,6 @@ Get luigi
 https://luigi.readthedocs.io/en/stable/index.html
 ...and run pipeline : 
 
-```python
+```console
 dir_with_luiger.py$ PYTHONPATH='.' luigi --module luiger Final --local-scheduler
 ```

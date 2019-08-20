@@ -67,5 +67,28 @@ def rawDictGen(nsta, maxSta, maxCont):
     return rawDict
 
 # example :
-raws = rawDictGen(16, 160, 4)
-print(raws)
+# raws = rawDictGen(16, 160, 4)
+# print(raws)
+
+# a = '/home/soczysty7/Mgr_19/IEEE-802.11ah-ns-3/'
+# b = "/home/soczysty7/Mgr_2019/8LipcaClone/IEEE-802.11ah-ns-3/"
+# c = 'OptimalRawGroup/traffic/5sta_sim.txt'
+# print((a+c)[-12:-11])
+# #print(len(a+c))
+# print(len(a+c))
+
+# c = 'OptimalRawGroup/traffic/50sta_sim.txt'
+# print((a+c)[-13:-11])
+# #print(len(a+c))
+# print(len(a+c))
+
+# c = 'OptimalRawGroup/traffic/540sta_sim.txt'
+# print((a+c)[-14:-11])
+# #print(len(a+c))
+# print(len(a+c))
+
+# c = 'OptimalRawGroup/traffic/5440sta_sim.txt'
+# print((a+c)[-15:-11])
+# #print(len(a+c))
+# print(len(a+c))
+

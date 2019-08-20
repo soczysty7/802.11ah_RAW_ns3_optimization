@@ -67,7 +67,7 @@ class LineChartist:
                     for j in range(0, len(fr[n][metric][i])):
                         fr[n][metric][i][j]=float(fr[n][metric][i][j])
                     fr[n][metric][i]=np.mean(fr[n][metric][i])
-
+                                                                # prosze zrob cos z tymi sciezkami
                 for i in range(0, len(fr[n]['TrafficString'])):
                     if (len(fr[n]['TrafficString'][i]) == 78): # 78 92
                         a = fr[n]['TrafficString'][i][-12:-11]   #nie kombinowac z tym trafficstringiem wystarczy Nsta +1
