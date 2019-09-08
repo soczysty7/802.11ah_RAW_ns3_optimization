@@ -3,7 +3,14 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import scipy.stats as st
-import os
+import os, re
+
+def simpleMatcher(word):
+    reg1 = r'(\d{1,4}sta)'
+    reg2 = r'(\d+)'
+    match1 = re.search(reg1, word)
+    match2 = re.search(reg2, match1[1])
+    return match2[1]
 
 class LineChartist:
 
@@ -42,16 +49,7 @@ class LineChartist:
 
             fr={} # Slownik zaczytanych dataframow - bedzie potrzebny zeby nie miec miliona zmiennych
             for j in range(0, len(frames)):
-                if (len(frames[j]['TrafficString'][0]) == 78): # 1 cyfrowa liczba stacji
-                    i=frames[j]['TrafficString'][0][-12:-11]  # 78 92
-                if (len(frames[j]['TrafficString'][0]) == 79): # 2 cyfrowa liczba stacji
-                    i=frames[j]['TrafficString'][0][-13:-11]  #79 93
-                if (len(frames[j]['TrafficString'][0]) == 80): # 3 cyfrowa liczba stacji
-                    i=frames[j]['TrafficString'][0][-14:-11] # 80 94
-                elif (len(frames[j]['TrafficString'][0]) == 81): # 4 cyfrowa liczba stacji
-                    i=frames[j]['TrafficString'][0][-15:-11] # 81 95
-                # i = float(frames[j]['NSta'][0]) + 1
-                # i = str(i)
+                i = simpleMatcher(frames[j]['TrafficString'][0])
                 fr[i]=frames[j] # w slowniku do klucza 'nsta' wczytuje dany dataframe
 
             meanArr = [] #lista srednich
@@ -69,14 +67,7 @@ class LineChartist:
                     fr[n][metric][i]=np.mean(fr[n][metric][i])
                                                                 # prosze zrob cos z tymi sciezkami
                 for i in range(0, len(fr[n]['TrafficString'])):
-                    if (len(fr[n]['TrafficString'][i]) == 78): # 78 92
-                        a = fr[n]['TrafficString'][i][-12:-11]   #nie kombinowac z tym trafficstringiem wystarczy Nsta +1
-                    if (len(fr[n]['TrafficString'][i]) == 79): # 79 93
-                        a = fr[n]['TrafficString'][i][-13:-11]
-                    if (len(fr[n]['TrafficString'][i]) == 80): # 80 94
-                        a = fr[n]['TrafficString'][i][-14:-11]
-                    elif (len(fr[n]['TrafficString'][i]) == 81): # 81 95
-                        a = fr[n]['TrafficString'][i][-15:-11]
+                    a = simpleMatcher(fr[n]['TrafficString'][i])                   
                     fr[n]['TrafficString'][i]=float(a)
 
                 fr[n]=fr[n].rename(columns={'TrafficString':'NSta'})
@@ -107,7 +98,9 @@ class LineChartist:
             sorted_array = [meanArr[indices[j]] for j in range(len(meanArr))]
             nsta.sort()
             #if idx == 0 else ""
-            ax.plot(nsta, sorted_array, self.colours[idx], label=str(p[0])+ 'sta/slot') #kropeczki chociaż rysować :)
+            match1 = re.search(r'(\d+)', p)
+            legendOzn = match1[1] + ' sta/slot'        
+            ax.plot(nsta, sorted_array, self.colours[idx], label=legendOzn) #kropeczki chociaż rysować :)
             ax.legend()
 
         plt.xlim(self.lim)

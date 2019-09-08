@@ -55,10 +55,8 @@ class CsvMaker:
                    for fil in dict_date[date][animal]:
                        copyfile(os.path.join(path, fil), os.path.join(path, date, animal, fil))
 
-    def analyzeToCsv(self):
+    def analyzeToCsv(self, scriptsDir):
     # 2 Skopiuj analyzebatch.pl do wyniczkiDir, skopiuj analyzedata.sh do kazdego folderu np do 32/32  
- 
-        scriptsDir = '/home/soczysty7/Mgr_19/magister_ludi'
 
         for dirs in os.listdir(self.wyniczkiDir):
         

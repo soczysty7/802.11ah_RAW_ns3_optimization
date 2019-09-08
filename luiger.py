@@ -8,19 +8,17 @@ from prePlot import PreparePlot as pp
 from chartistLINEstack import LineChartist as ch
 import grouper as gr
 
-rawObj = gr.rawDictGen(1200, 3600, 6)
-plot_xAxis = [1100, 3700]
-# directoryPath = "/home/soczysty7/Mgr_2019/8LipcaClone/IEEE-802.11ah-ns-3/"
-# resultsOfSim = '/home/soczysty7/Mgr_2019/8LipcaClone/ponad_tysiac/'
-# plotDir = '/home/soczysty7/Mgr_2019/8LipcaClone/ponad_tysiac_plots/'
-# logPath = '/home/soczysty7/Mgr_2019/magister_ludi/logs/'
-# subPaths = ['4c', '5c', '6c']
+contentions = range(4, 24, 4) 
+rawObj = gr.rawDictGen(20, 200, contentions)
+plot_xAxis = [10, 210]
 
-directoryPath = "/home/soczysty7/Mgr_19/IEEE-802.11ah-ns-3/"
-resultsOfSim = '/home/soczysty7/Mgr_19/ponad_tysiac/'
-plotDir = '/home/soczysty7/Mgr_19/ponad_tysiac_plots/'
-logPath = '/home/soczysty7/Mgr_19/magister_ludi/logs/'
-subPaths = ['4c', '5c', '6c' ]
+directoryPath = "/home/soczysty7/Mgr19/8LipcaClone/IEEE-802.11ah-ns-3/"
+resultsOfSim = '/home/soczysty7/Mgr19/Results/tcpecho1/'
+plotDir = '/home/soczysty7/Mgr19/Results/tcpecho/'
+logPath = '/home/soczysty7/Mgr19/Results/tcpecho1_logs/'
+subPaths = [str(i) + 'c' for i in contentions]
+scriptsDir = '/home/soczysty7/magister_ludi'
+
 #res= '/home/soczysty7/Mgr_2019/Results/testCampaign1toPLOT/'
 
 class GenTraffic(luigi.Task):
@@ -34,8 +32,8 @@ class GenTraffic(luigi.Task):
         print(rawObj)
         t = 3.0
         o = 0.3
-        n = 1200
-        m = 3600
+        n = 20
+        m = 200
         genTr=tm(directoryPath, self.TrafficPath)
         genTr.genTraffic(n,m,o,t)
         now = datetime.now()
@@ -63,8 +61,8 @@ class GenRawConfigs(luigi.Task):
 
 class RunSimulations(luigi.Task):
 
-    # def requires(self):
-    #     return GenRawConfigs()
+    def requires(self):
+        return GenRawConfigs()
 
     def output(self):
         return luigi.LocalTarget(logPath + '3_run-sim.txt')
@@ -90,7 +88,7 @@ class MakeCsv(luigi.Task):
     def run(self):
         analyzer = CsvMaker(resultsOfSim)
         analyzer.transformFolders()
-        analyzer.analyzeToCsv()
+        analyzer.analyzeToCsv(scriptsDir)
 
         now = datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -116,11 +114,11 @@ class PrepareToPlot(luigi.Task):
 
 class GenerateCharts(luigi.Task):
 
-    # def requires(self):
-    #     return PrepareToPlot()
+    def requires(self):
+        return PrepareToPlot()
 
     def output(self):
-        return luigi.LocalTarget('./logs/6_make_plots.txt')
+        return luigi.LocalTarget(logPath + '6_make_plots.txt')
 
     def run(self):
         chartist = ch(plotDir, subPaths, plot_xAxis)
@@ -147,6 +145,8 @@ class Final(luigi.Task):
         with self.output().open('w') as f:
             f.write('pipeline skonczon ' + dt_string)
 
+# PYTHONPATH='.' luigi --module luiger Final --local-scheduler
+
 # for centralized scheduler mode :
-#if __name__ == '__main__':
-#    luigi.run(['Final', '--workers', '1'])
+# if __name__ == '__main__':
+#    luigi.run(['Final', '--workers', '1'])s

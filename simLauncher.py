@@ -39,7 +39,7 @@ ktorych bazowal rawGenerator robiac pliki rawconfigow :
     arg_stale['payloadSize'] = '1500'
     arg_stale['simulationTime'] = '60'
     arg_stale['rho'] = '50'
-    arg_stale['TrafficType'] = 'udp'
+    arg_stale['TrafficType'] = 'tcpecho'
 
     # Argumenty zmienne default:
 
@@ -102,7 +102,7 @@ ktorych bazowal rawGenerator robiac pliki rawconfigow :
                         waf_commands[y] += ' --NSSFile=' + simFolder + file
                         waf_commands[y] += ' --seed=' + str(s)
                         waf_commands[y] += ' --RAWConfigFile=' + pathToRaw
-                        waf_commands[y] += ' --TrafficPath=' + tmp + ' & "'
+                        waf_commands[y] += ' --TrafficPath=' + tmp + ' "'
                                 
                         all_waf += waf_commands[y] + '\n'
                         y += 1                  

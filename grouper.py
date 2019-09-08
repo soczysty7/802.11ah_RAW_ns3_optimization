@@ -54,10 +54,9 @@ def rawDictGen(nsta, maxSta, maxCont):
     rawDict = {}
     
     # tak na prawde to znaczy ILE STACJI RYWALIZUJE W SLOCIE
-    contentions = range(1, maxCont+1) 
     numbers = range(nsta, maxSta + nsta, nsta)
 
-    for c in contentions:
+    for c in maxCont:
         cont = str(c)
         rawDict[cont] = {}
         for n in numbers:
