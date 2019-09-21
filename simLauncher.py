@@ -39,7 +39,7 @@ ktorych bazowal rawGenerator robiac pliki rawconfigow :
     arg_stale['payloadSize'] = '1500'
     arg_stale['simulationTime'] = '60'
     arg_stale['rho'] = '50'
-    arg_stale['TrafficType'] = 'tcpecho'
+    arg_stale['TrafficType'] = 'udpecho'
 
     # Argumenty zmienne default:
 

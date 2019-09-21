@@ -21,7 +21,7 @@ class LineChartist:
 
     # Wczytaj tylko wlasciwe kolumny :
 
-    colours=['r','g','b','k', 'm']
+    colours=['r','g','b','k','m']
     metricToShow = ['Latency', 'PacketLoss', 'GoodputKbit', 'EnergyRxIdle', 'EnergyTx']
 
     # stats=edcaqueuelength,totalnumberofdrops,numberofmactxmissedack,numberoftransmissions,
@@ -41,10 +41,10 @@ class LineChartist:
                     continue
                 #if filename.startswith('1S'):
                 #    continue
-                print(os.path.join(path, filename))
+                #print(os.path.join(path, filename))
                 df = pd.read_csv(os.path.join(path, filename), delimiter=';',usecols=[metric,'TrafficString'])
                 if not df.empty:
-                    print(df)
+                    #print(df)
                     frames.append(df)
 
             fr={} # Slownik zaczytanych dataframow - bedzie potrzebny zeby nie miec miliona zmiennych

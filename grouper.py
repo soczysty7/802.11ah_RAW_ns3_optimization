@@ -65,8 +65,25 @@ def rawDictGen(nsta, maxSta, maxCont):
 
     return rawDict
 
+def staticDictGen(nsta, maxSta, gsBit, maxCont):
+    # gsBit : true zmieniamy liczba GRUP a slot ustawiamy na 1 (stala)
+    #         false: zmieniamy liczba SLOTOW a grup ustawiamy na 1 (stala)
+    # generuje rawObj {N (grup, slotow) : nSTA: [nGR, nSLOT]
+    rawDict = {}
+    numbers = range(nsta, maxSta + nsta, nsta)
+    for c in maxCont:
+        cont = str(c)
+        rawDict[cont] = {}
+        for n in numbers:
+            nSTA = str(n)
+            if c < n:
+                tmp = [c,1] if gsBit else [1,c] 
+                rawDict[cont][nSTA] = tmp
+    return rawDict   
+
 # example :
-# raws = rawDictGen(16, 160, 4)
+# contentions = range(5, 35, 5)
+# raws = staticDictGen(10, 200, True, contentions)
 # print(raws)
 
 # a = '/home/soczysty7/Mgr_19/IEEE-802.11ah-ns-3/'

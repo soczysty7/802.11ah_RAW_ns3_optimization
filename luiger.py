@@ -8,14 +8,17 @@ from prePlot import PreparePlot as pp
 from chartistLINEstack import LineChartist as ch
 import grouper as gr
 
-contentions = range(4, 24, 4) 
-rawObj = gr.rawDictGen(20, 200, contentions)
-plot_xAxis = [10, 210]
+# contentions = range(5, 30, 5) 
+# rawObj = gr.rawDictGen(10, 250, contentions)
+contentions = range(5, 35, 5)
+rawObj = gr.staticDictGen(10, 200, True, contentions)
+plot_xAxis = [0, 210]
+simName = "200udp_groups_SAT"
 
-directoryPath = "/home/soczysty7/Mgr19/8LipcaClone/IEEE-802.11ah-ns-3/"
-resultsOfSim = '/home/soczysty7/Mgr19/Results/tcpecho1/'
-plotDir = '/home/soczysty7/Mgr19/Results/tcpecho/'
-logPath = '/home/soczysty7/Mgr19/Results/tcpecho1_logs/'
+directoryPath = '/home/soczysty7/Mgr19/8LipcaClone/IEEE-802.11ah-ns-3/'
+resultsOfSim = '/home/soczysty7/Mgr19/Results/STATIC/' + simName + '/'
+plotDir = '/home/soczysty7/Mgr19/Results/STATIC/' + simName + '_plots/'
+logPath = '/home/soczysty7/Mgr19/Results/STATIC/' + simName + '_logs/'
 subPaths = [str(i) + 'c' for i in contentions]
 scriptsDir = '/home/soczysty7/magister_ludi'
 
@@ -32,7 +35,7 @@ class GenTraffic(luigi.Task):
         print(rawObj)
         t = 3.0
         o = 0.3
-        n = 20
+        n = 10
         m = 200
         genTr=tm(directoryPath, self.TrafficPath)
         genTr.genTraffic(n,m,o,t)
