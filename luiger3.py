@@ -6,12 +6,13 @@ from simLauncher import SimLauncher as sm
 from csvMaker import CsvMaker
 from prePlot import PreparePlot as pp
 from chartistLINEstack import LineChartist as ch
+from chartist2_LINE import LineChartistSimple as chs
 import grouper as gr
 from clean import garbageCollector as gc
 
 # contentions = range(5, 30, 5) 
 # rawObj = gr.rawDictGen(10, 250, contentions)
-contentions = range(5, 10, 5)
+contentions = range(5, 30, 5)
 rawObj = gr.staticDictGen(10, 200, False, contentions)
 plot_xAxis = [0, 210]
 simName = "DEBUG"
@@ -143,7 +144,7 @@ class GenerateCharts(luigi.Task):
         return luigi.LocalTarget(logPath + '6_make_plots.txt')
 
     def run(self):
-        chartist = ch(plotDir, subPaths, plot_xAxis)
+        chartist = chs(plotDir, subPaths, plot_xAxis)
         chartist.makePlotStack()        
 
         now = datetime.now()

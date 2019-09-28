@@ -7,7 +7,7 @@ import os, re
 # Wczytaj tylko wlasciwe kolumny :
 
 #path = '/home/soczysty7/Mgr_2019/8LipcaClone/per_contention_charts/4c'
-path = '/home/soczysty7/Mgr19/Results/STATIC/DEBUG_plots/5c'
+path = '/home/soczysty7/Mgr19/Results/STATIC/DEBUG_plots/'
 frames = []
 metricToShow = ['Latency', 'PacketLoss', 'GoodputKbit', 'EnergyRxIdle', 'EnergyTx']
 metric = metricToShow[2]
@@ -63,13 +63,13 @@ for n in fr.keys(): #
     n = df_nice.count()
     yerr = std / np.sqrt(n) * st.t.ppf(1-alpha/2, n - 1)
 
-    # Dodanie do wykresu słupka dla danego df:
+    # Dodanie do wykresu slupka dla danego df:
 
     ax = mean.plot(title='4 STA per slot', yerr=yerr)
     ax.set(xlabel="NSta", ylabel="Mean Per STA GoodputKbit")
     ax=plt.errorbar(mean.index, mean, yerr=yerr, linestyle='',capsize=3)
     ax=plt.bar(mean.index, mean, width=3)
-    #ax.plot(mean.index, mean, 'b-') #kropeczki chociaż rysować :)
+    #ax.plot(mean.index, mean, 'b-') #kropeczki chociaz rysowac :)
     # x = np.linspace(0, 10*np.pi, 100)
     # y = np.sin(x)
     # ax.plot(x, y, 'b-')

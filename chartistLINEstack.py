@@ -77,9 +77,11 @@ class LineChartist:
 
                 df_nice = fr[n].groupby('NSta')[metric]
                 mean = df_nice.mean()
-                meanArr.append(mean.data[0])
                 nsta.append(mean.index[0])
                 std = df_nice.std()
+                meanArr.append(mean.data[0])
+                print('DEBUG meanArr, nsta', meanArr, nsta, '\n')
+                print('DEBUG current dataframe: ', fr, '\n')
 
                 alpha=0.05
                 n = df_nice.count()
@@ -114,3 +116,4 @@ class LineChartist:
     def makePlotStack(self):
         for met in self.metricToShow:
             self.makePlot(self.subPaths, met)
+
