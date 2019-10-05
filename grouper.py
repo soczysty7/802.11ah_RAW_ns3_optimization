@@ -82,9 +82,9 @@ def staticDictGen(nsta, maxSta, gsBit, maxCont):
     return rawDict   
 
 # example :
-# contentions = range(5, 35, 5)
-# raws = staticDictGen(10, 200, True, contentions)
-# print(raws)
+contentions = range(5, 35, 5)
+raws = staticDictGen(10, 200, True, contentions)
+print(raws)
 
 # a = '/home/soczysty7/Mgr_19/IEEE-802.11ah-ns-3/'
 # b = "/home/soczysty7/Mgr_2019/8LipcaClone/IEEE-802.11ah-ns-3/"

@@ -17,6 +17,15 @@ rawObj = gr.staticDictGen(10, 200, False, contentions)
 plot_xAxis = [0, 210]
 simName = "DEBUG"
 
+# zrobic dla nich + odpowiedni raw object
+# byc moze trzeba json config
+
+# 200udpEcho_slots_NonSAT
+# 200udp_groups_NonSAT
+# 200udp_groups_SAT
+# 200udp_slots_NonSAT
+# 200udp_slots_SAT
+
 directoryPath = '/home/soczysty7/Mgr19/8LipcaClone/IEEE-802.11ah-ns-3/'
 resultsOfSim = '/home/soczysty7/Mgr19/Results/STATIC/' + simName + '/'
 plotDir = '/home/soczysty7/Mgr19/Results/STATIC/' + simName + '_plots/'
@@ -120,8 +129,8 @@ class MakeCsv(luigi.Task):
 
 class PrepareToPlot(luigi.Task):
 
-    def requires(self):
-        return MakeCsv()
+    # def requires(self):
+    #     return MakeCsv()
 
     def output(self):
         return luigi.LocalTarget(logPath + '5_prepare_bf_plot.txt')
@@ -137,14 +146,14 @@ class PrepareToPlot(luigi.Task):
 
 class GenerateCharts(luigi.Task):
 
-    # def requires(self):
-    #     return PrepareToPlot()
+    def requires(self):
+        return PrepareToPlot()
 
     def output(self):
         return luigi.LocalTarget(logPath + '6_make_plots.txt')
 
     def run(self):
-        chartist = chs(plotDir, subPaths, plot_xAxis)
+        chartist = ch(plotDir, subPaths, plot_xAxis)
         chartist.makePlotStack()        
 
         now = datetime.now()

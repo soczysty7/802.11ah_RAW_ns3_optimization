@@ -68,6 +68,6 @@ class PreparePlot:
 
                     #skopiuj do niego csv regex = r'(j)/(nGroups)_S_(nSlo)'
                     oldCSVpath = regGroupMatcher(j,nGroups,nSlo,self.csvKi)
-                    newCSVpath = toCreate + os.path.basename(oldCSVpath)
+                    newCSVpath = toCreate + 'nsta' + str(j) + '_' + os.path.basename(oldCSVpath)
                     copyfile(oldCSVpath, newCSVpath)
 
