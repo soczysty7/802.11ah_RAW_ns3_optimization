@@ -12,10 +12,10 @@ from clean import garbageCollector as gc
 
 # contentions = range(5, 30, 5) 
 # rawObj = gr.rawDictGen(10, 250, contentions)
-contentions = range(5, 30, 5)
-rawObj = gr.staticDictGen(10, 200, False, contentions)
-plot_xAxis = [0, 210]
-simName = "DEBUG"
+contentions = range(50, 500, 50)
+rawObj = gr.staticDictGen(50, 500, False, contentions)
+plot_xAxis = [0, 550]
+simName = "500udp_slots_NonSAT"
 
 # zrobic dla nich + odpowiedni raw object
 # byc moze trzeba json config
@@ -27,9 +27,9 @@ simName = "DEBUG"
 # 200udp_slots_SAT
 
 directoryPath = '/home/soczysty7/Mgr19/8LipcaClone/IEEE-802.11ah-ns-3/'
-resultsOfSim = '/home/soczysty7/Mgr19/Results/STATIC/' + simName + '/'
-plotDir = '/home/soczysty7/Mgr19/Results/STATIC/' + simName + '_plots/'
-logPath = '/home/soczysty7/Mgr19/Results/STATIC/' + simName + '_logs/'
+resultsOfSim = '/home/soczysty7/Mgr19/Results/nowyArtNonCSB_4_11/' + simName + '/'
+plotDir = '/home/soczysty7/Mgr19/Results/nowyArtNonCSB_4_11/' + simName + '_plots/'
+logPath = '/home/soczysty7/Mgr19/Results/nowyArtNonCSB_4_11/' + simName + '_logs/'
 subPaths = [str(i) + 'c' for i in contentions]
 scriptsDir = '/home/soczysty7/magister_ludi'
 #res= '/home/soczysty7/Mgr_2019/Results/testCampaign1toPLOT/'
@@ -62,10 +62,10 @@ class GenTraffic(luigi.Task):
 
     def run(self):
         print(rawObj)
-        t = 3.0
+        t = 2.25
         o = 0.3
-        n = 10
-        m = 200
+        n = 50
+        m = 500
         genTr=tm(directoryPath, self.TrafficPath)
         genTr.genTraffic(n,m,o,t)
         now = datetime.now()
@@ -100,9 +100,10 @@ class RunSimulations(luigi.Task):
         return luigi.LocalTarget(logPath + '3_run-sim.txt')
 
     def run(self):
-        simLchrr = sm(directoryPath, resultsOfSim, rawObj, 3)
-        simLchrr.writeCmdsToFile()
-        simLchrr.RunSimulations()
+        simLchrr = sm(directoryPath, resultsOfSim, rawObj, 3) # tu mozna przekazac jsony configi ?
+        # simLchrr.writeCmdsToFile()
+        simLchrr.RunSimulations("/home/soczysty7/magister_ludi/REMAINING.txt")
+        # simLchrr.runRemaining(resultsOfSim)
 
         now = datetime.now()
         dt_string = now.strftime("%d/%m/%Y %H:%M:%S")
@@ -111,8 +112,8 @@ class RunSimulations(luigi.Task):
 
 class MakeCsv(luigi.Task):
 
-    def requires(self):
-        return RunSimulations()
+    # def requires(self):
+    #     return RunSimulations()
 
     def output(self):
         return luigi.LocalTarget(logPath + '4_mk-csvs.txt')
@@ -129,8 +130,8 @@ class MakeCsv(luigi.Task):
 
 class PrepareToPlot(luigi.Task):
 
-    # def requires(self):
-    #     return MakeCsv()
+    def requires(self):
+        return MakeCsv()
 
     def output(self):
         return luigi.LocalTarget(logPath + '5_prepare_bf_plot.txt')

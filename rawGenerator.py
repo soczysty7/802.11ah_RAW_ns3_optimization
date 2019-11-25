@@ -6,12 +6,11 @@ import errno
 
 class RawMaker:
 
-    def __init__(self,dp, rawObject):
+    def __init__(self,dp, rawObject, BI):
         self.directoryPath = dp
+        self.beaconIntervals = BI
         self.arg_zmienne['RAWConfigPath'] = self.directoryPath + 'OptimalRawGroup/'
         self.raws = rawObject 
-        self.genCmds()
-        #generateRawConfigs()
 
         # na razie wszystkie arg sa stale a zmienne generowane z rawObj :)
 
@@ -21,7 +20,6 @@ class RawMaker:
 
     # Argumenty stale :
 
-    arg_stale['beaconinterval'] = '102400'
     arg_stale['pageSliceCount'] = '1'
     arg_stale['pageSliceLen'] = '0'
 
@@ -30,11 +28,13 @@ class RawMaker:
     arg_zmienne['NRawSta'] = ''
     arg_zmienne['NGroup'] = ''
     arg_zmienne['NumSlot'] = ''
+    arg_zmienne['beaconinterval'] = ''
     #arg_zmienne['RAWConfigPath'] = directoryPath + 'OptimalRawGroup/' Patrz wyzej-init
 
     cmdsToWrite = ''
 
-    def genCmds(self):
+    def genCmds(self, bi):
+        self.arg_zmienne['beaconinterval'] = bi
         cmd_command = './waf --run "'
         cmd_command += 'RAW-generate'
 
@@ -69,7 +69,7 @@ class RawMaker:
                     rGroups = str(self.raws[i][j][0])
                     rSlots = str(self.raws[i][j][1])
                     pathToRaw +=  'RawConfig-' + '-' + nSta + '-' + rGroups + '-' + rSlots + '-'
-                    pathToRaw += self.arg_stale['beaconinterval'] + '-' + self.arg_stale['pageSliceCount'] + '-' + self.arg_stale['pageSliceLen'] + '.txt'
+                    pathToRaw += self.arg_zmienne['beaconinterval'] + '-' + self.arg_stale['pageSliceCount'] + '-' + self.arg_stale['pageSliceLen'] + '.txt'
 
                     self.arg_zmienne['NRawSta'] = nSta
                     self.arg_zmienne['NGroup'] = rGroups
@@ -85,7 +85,7 @@ class RawMaker:
                     waf_commands[y] += ' --NGroup=' + self.arg_zmienne['NGroup']
                     waf_commands[y] += ' --NumSlot=' + self.arg_zmienne['NumSlot']
                     waf_commands[y] += ' --RAWConfigPath=' + pathToRaw
-                    waf_commands[y] += ' --beaconinterval=' + self.arg_stale['beaconinterval']
+                    waf_commands[y] += ' --beaconinterval=' + self.arg_zmienne['beaconinterval']
                     waf_commands[y] += ' --pageSliceCount=' + self.arg_stale['pageSliceCount'] 
                     waf_commands[y] += ' --pageSliceLen=' + self.arg_stale['pageSliceLen'] + '"'
 
@@ -93,12 +93,14 @@ class RawMaker:
                     y += 1
 
         # ----------------------------
-        self.cmdsToWrite = all_waf
+        self.cmdsToWrite += all_waf
         #return all_waf
 
     def writeCmdsToFile(self):
         # Pisanie komend do pliku:
 
+        for bi in self.beaconIntervals:
+            self.genCmds(bi)
         AutoWaf = open("waf-commands-rawGenerate.txt", "w")
         print("Wpisuje wygenerowane komendy do pliku...")
         AutoWaf.writelines(self.cmdsToWrite)

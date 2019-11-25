@@ -3,6 +3,7 @@ import os
 import copy
 import subprocess
 import errno
+import re
 
 class SimLauncher:
     """
@@ -19,14 +20,16 @@ Raws to slownik zawierajacy wszystkie konfiguracje do przetestowania na
 ktorych bazowal rawGenerator robiac pliki rawconfigow :
     """
 
-    def __init__(self,dp, resultsDir, rawObject, seed):
+    def __init__(self,dp, resultsDir, rawObject, BI,  distanceFromAP, payloadSize, seed):
         self.directoryPath = dp
         self.arg_zmienne['TrafficPath'] = self.directoryPath + 'OptimalRawGroup/traffic/'
         self.arg_zmienne['RAWConfigPath'] = self.directoryPath + 'OptimalRawGroup/'
         self.arg_zmienne['NSSFile'] = resultsDir
+        self.arg_stale['rho'] = distanceFromAP
+        self.arg_stale['payloadSize'] = payloadSize
         self.raws = rawObject 
         self.n = seed
-        self.genCmds()        
+        self.beaconIntervals = BI    
         #RunSimulations()
 
 
@@ -36,10 +39,10 @@ ktorych bazowal rawGenerator robiac pliki rawconfigow :
     # Argumenty stale :
 
     arg_stale['DataMode'] = 'MCS2_8'
-    arg_stale['payloadSize'] = '1500'
+    # arg_stale['payloadSize'] = '100'
     arg_stale['simulationTime'] = '60'
-    arg_stale['rho'] = '50'
-    arg_stale['TrafficType'] = 'udpecho'
+    # arg_stale['rho'] = '50'
+    arg_stale['TrafficType'] = 'udp'
 
     # Argumenty zmienne default:
 
@@ -48,14 +51,14 @@ ktorych bazowal rawGenerator robiac pliki rawconfigow :
     arg_zmienne['RAWConfigFile'] = './OptimalRawGroup/'
 
     # For raw files searching :
-    arg_zmienne['beaconinterval'] = '102400'
     arg_zmienne['pageSliceCount'] = '1'
     arg_zmienne['pageSliceLen'] = '0'
+    arg_zmienne['beaconinterval'] = ''
 
     cmdsToWrite = ''
 
-    def genCmds(self):
-
+    def genCmds(self, bi):
+        self.arg_zmienne['beaconinterval'] = bi
         cmd_command = './waf --run "'
         cmd_command += 'test'
             
@@ -99,7 +102,8 @@ ktorych bazowal rawGenerator robiac pliki rawconfigow :
                         tmp = self.arg_zmienne['TrafficPath'] + nSta + 'sta_sim' + '.txt'
                                 
                         file = nSta + 'sta_sim' + 'G_' + rGroups + '_S_' + rSlots + '_seed_' + str(s)
-                        waf_commands[y] += ' --NSSFile=' + simFolder + file
+                        additionalSimInfo = 'BI_' + self.arg_zmienne['beaconinterval'] + 'Rho_' + str(self.arg_stale['rho']) + 'Ps_' + str(self.arg_stale['payloadSize'])
+                        waf_commands[y] += ' --NSSFile=' + simFolder + additionalSimInfo + file 
                         waf_commands[y] += ' --seed=' + str(s)
                         waf_commands[y] += ' --RAWConfigFile=' + pathToRaw
                         waf_commands[y] += ' --TrafficPath=' + tmp + ' "'
@@ -107,20 +111,22 @@ ktorych bazowal rawGenerator robiac pliki rawconfigow :
                         all_waf += waf_commands[y] + '\n'
                         y += 1                  
         # ----------------------------
-        self.cmdsToWrite = all_waf
+        self.cmdsToWrite += all_waf
         #return all_waf
 
-    def writeCmdsToFile(self):
-        # Pisanie komend do pliku:
 
-        AutoWaf = open("waf-commands-StaticRawCampaign.txt", "w")
+    def writeCmdsToFile(self, commandFile = "waf-commands-aaa.txt"):
+        # Pisanie komend do pliku:
+        for bi in self.beaconIntervals:
+            self.genCmds(bi)
+        AutoWaf = open(commandFile, "w")
         print("Wpisuje wygenerowane komendy do pliku...")
         AutoWaf.writelines(self.cmdsToWrite)
         AutoWaf.close()
 
-    def RunSimulations(self):
+    def RunSimulations(self, commandFile = "waf-commands-aaa.txt"):
 
-        AutoWaf = open("waf-commands-StaticRawCampaign.txt", "r")
+        AutoWaf = open(commandFile, "r")
         commandLists = []  # Create an array to store our waf commands
         os.getcwd()
         print("Wczytuje komendy z przygotowanego pliku ...")

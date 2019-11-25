@@ -1,5 +1,4 @@
 #!/usr/bin/python
-
 import itertools
 import math
 import numpy as np
@@ -14,97 +13,75 @@ def divisorGenerator(n):
     for divisor in reversed(large_divisors):
         yield divisor
 
-# TODO Zrob to ladnie funkcyjnie, in place :
-# condition = np.mod(possiblePairs, 16)==2
-# np.extract(condition, possiblePairs)
-
 def rawFilter(n, contention):
     x = list(divisorGenerator(n))
     y = [p for p in itertools.product(x, repeat=2)]
     possiblePairs = np.array(y)
-
     # roznice miedzy elementami :
     diffs = np.diff(possiblePairs)
-
     # indexy gdzie druga wartosc possiblePairs jest wieksza od pierwszej :
     diff_pos_id = np.where(diffs >= 0)[0]
-
     possiblePairs = possiblePairs[diff_pos_id]
-    #print(possiblePairs)
-
     wybrani = []
     for  j in range (0, possiblePairs.shape[0]):
         multi = possiblePairs[j][0]*possiblePairs[j][1]
-        #print(possiblePairs[j], multi, 16 // multi )
         if((n / multi) == contention):
-            #print(n // multi)
             wybrani.append(possiblePairs[j])
     wybrani2 = np.array(wybrani)
-    # print(wybrani2)
     # indexy najmniejszych roznic miedzy elementami :
-    # tylko jesli jest niepusty :
-    
+    # tylko jesli jest niepusty :    
     if wybrani2.size > 0:
         idx = np.argmin(np.diff(wybrani2))
-        #print(contention, wybrani2[idx])
         a = wybrani2[idx]
         return [int(a[1]), int(a[0])]
 
-def rawDictGen(nsta, maxSta, maxCont):
+def rawDictGen(numbers, maxCont):
     rawDict = {}
-    
-    # tak na prawde to znaczy ILE STACJI RYWALIZUJE W SLOCIE
-    numbers = range(nsta, maxSta + nsta, nsta)
-
     for c in maxCont:
         cont = str(c)
         rawDict[cont] = {}
         for n in numbers:
             nSTA = str(n)
             rawDict[cont][nSTA] = rawFilter(n, c)
-
     return rawDict
 
-def staticDictGen(nsta, maxSta, gsBit, maxCont):
-    # gsBit : true zmieniamy liczba GRUP a slot ustawiamy na 1 (stala)
-    #         false: zmieniamy liczba SLOTOW a grup ustawiamy na 1 (stala)
+def staticDictGen(numbers, gsBit, maxCont, staticNumber):
+    # gsBit : true zmieniamy liczba GRUP a slot ustawiamy na staticNumber (stala)
+    #         false: zmieniamy liczba SLOTOW a grup ustawiamy na staticNumber (stala)
     # generuje rawObj {N (grup, slotow) : nSTA: [nGR, nSLOT]
     rawDict = {}
-    numbers = range(nsta, maxSta + nsta, nsta)
     for c in maxCont:
         cont = str(c)
         rawDict[cont] = {}
         for n in numbers:
             nSTA = str(n)
             if c < n:
-                tmp = [c,1] if gsBit else [1,c] 
+                tmp = [c,staticNumber] if gsBit else [staticNumber,c] 
                 rawDict[cont][nSTA] = tmp
     return rawDict   
 
-# example :
-contentions = range(5, 35, 5)
-raws = staticDictGen(10, 200, True, contentions)
+"""
+# Example :
+
+contentions = [1, 2, 5]
+numberOfStations = [250, 1000, 2000]
+
+# try grouppings for 3 cases : 
+
+# 1 static number of RAW slots :
+# pogrupuj 250, 1000, 2000 stacji w : 1, 2, 5 grup po 10 slotow kazda :
+
+# raws = staticDictGen(numberOfStations, True, contentions, 10)
+
+# 2 static number of RAW groups :
+# pogrupuj 250, 1000, 2000 stacji w : 10 grup po 1, 2, 5 slotow kazda :
+
+# raws = staticDictGen(numberOfStations, False, contentions, 10)
+
+# 3 only given number of contentions per RAW slot :
+# pogrupuj 250, 1000, 2000 stacji w we wszystkie mozliwe kombinacje,
+# tak ze na jeden slot przypada 1, 2 lub 5 stacji :
+
+raws = rawDictGen(numberOfStations, contentions)
 print(raws)
-
-# a = '/home/soczysty7/Mgr_19/IEEE-802.11ah-ns-3/'
-# b = "/home/soczysty7/Mgr_2019/8LipcaClone/IEEE-802.11ah-ns-3/"
-# c = 'OptimalRawGroup/traffic/5sta_sim.txt'
-# print((a+c)[-12:-11])
-# #print(len(a+c))
-# print(len(a+c))
-
-# c = 'OptimalRawGroup/traffic/50sta_sim.txt'
-# print((a+c)[-13:-11])
-# #print(len(a+c))
-# print(len(a+c))
-
-# c = 'OptimalRawGroup/traffic/540sta_sim.txt'
-# print((a+c)[-14:-11])
-# #print(len(a+c))
-# print(len(a+c))
-
-# c = 'OptimalRawGroup/traffic/5440sta_sim.txt'
-# print((a+c)[-15:-11])
-# #print(len(a+c))
-# print(len(a+c))
-
+"""
