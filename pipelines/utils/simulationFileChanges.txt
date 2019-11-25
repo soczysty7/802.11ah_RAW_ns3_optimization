@@ -1,6 +1,6 @@
-od 1175 :
+from line 1175 :
 
-w s1g-test-tim-raw.cc
+in your simulation scenario file :  s1g-test-tim-raw.cc
 
 	/*config.NSSFile = config.trafficType + "_" + std::to_string(config.Nsta)
 			+ "sta_" + std::to_string(config.NGroup) + "Group_"
@@ -11,7 +11,7 @@ w s1g-test-tim-raw.cc
 
 	config.NSSFile += + ".nss";
 
-    configuration.cc od 23 :
+then in its : configuration.cc from line 23 :
 
     //cmd.AddValue ("folder", "folder where result files are placed", folder);
     //cmd.AddValue ("file", "files containing reslut information", file);
