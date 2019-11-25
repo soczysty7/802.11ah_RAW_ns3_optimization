@@ -32,7 +32,7 @@
 
 ### How this project interacts with ns-3:
 
-![How it works with ns-3](ProgramStructure.png | width=512)
+![How it works with ns-3](ProgramStructure.png)
 
 ---
 
