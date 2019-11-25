@@ -18,6 +18,7 @@ class LineChartist:
         self.basePath = resultsDir
         self.subPaths = subDirs
         self.lim = xaxis
+
     # mozna wyrysowac wedlug takich metryk :
 
     # edcaqueuelength,totalnumberofdrops,numberofmactxmissedack,numberoftransmissions,

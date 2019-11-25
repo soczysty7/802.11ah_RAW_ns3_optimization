@@ -3,15 +3,13 @@ import os
 import re
 from shutil import copyfile
 from collections import defaultdict
-
 from tempfile import mkstemp
 from shutil import move
 from os import fdopen, remove
-
 import grouper as gr
 
 def regGroupMatcher(nsta, ngr, nsl, test_str):
-    # tworzymy regexa i patrzymy ktora .csv maczuje,
+    # tworzymy regexa i patrzymy ktora .csv pasuje,
     regex = '(' + str(nsta) + ')/(' + str(ngr) + ')_S_(' + str(nsl) + ')'
     matches = [re.findall(regex,l) for l in test_str]
     indexes = [i for i,v in enumerate(matches) if v]
