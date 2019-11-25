@@ -1,5 +1,3 @@
-# magister_ludi
-
 ## Improving the Performance of Densely Deployed IEEE 802.11ah Networks
 ---
 ### Project Setup :
