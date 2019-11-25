@@ -6,7 +6,7 @@ from collections import defaultdict
 from tempfile import mkstemp
 from shutil import move
 from os import fdopen, remove
-import grouper as gr
+import utils.grouper as gr
 
 def regGroupMatcher(nsta, ngr, nsl, test_str):
     # tworzymy regexa i patrzymy ktora .csv pasuje,
