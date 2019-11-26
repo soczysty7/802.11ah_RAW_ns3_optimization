@@ -57,6 +57,7 @@ def calculateGain(low, high):
     low = np.mean(low)
     high = np.mean(high)
     gain = ((high - low) / low) * 100
+    print(high, low)
     return abs(gain)
 
 def makePlots(gainMap):
