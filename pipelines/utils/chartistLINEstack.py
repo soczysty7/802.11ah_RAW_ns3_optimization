@@ -81,6 +81,7 @@ class LineChartist:
             ax.plot(nsta, sorted_array, self.colours[idx], label=legendOzn)
             ax.legend()
         plt.xlim(self.lim)
+        if metric in ['Latency', 'PacketLoss']: plt.ylim(bottom=0)
         #plt.show(ax)
         fileName = metric + 'Stack' + '.svg'
         plt.savefig(self.basePath + fileName ,format='svg')
