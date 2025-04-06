@@ -1,4 +1,11 @@
 ## Improving the Performance of Densely Deployed IEEE 802.11ah Networks
+
+"In this overview it was indicated that the performance of densely deployed 802.11ah networks is
+largely dependent on the traffic flow scheme. It was also presented how various network performance metrics
+can be improved depending on scenario conditions. For each
+such optimization the possible improvement gain was estimated. Results show that especially latency
+and packet loss can be reduced with gain of above 40% with proper RAW mechanism configuration."
+
 ---
 ### Project Setup :
 + Clone 802.11ah ns-3 module: 
